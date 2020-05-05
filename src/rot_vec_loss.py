@@ -23,5 +23,5 @@ class RotVecLoss(nn.Module):
         # so R = m1.t @ m2
         # and R is a 3x3 matrix, we need to transfer it back to rot_vec by Rodrigues
         loss = np.linalg.norm(cv2.Rodrigues(R)[0])
-        loss = torch.from_numpy(np.array(loss))
+        loss = torch.from_numpy(np.array(loss))  # unit: radian
         return loss
