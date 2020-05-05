@@ -123,3 +123,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# pycharm project
+.idea/
+
+# dataset
+src/office
+src/stairs
+src/__pycache__
