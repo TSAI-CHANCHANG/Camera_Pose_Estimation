@@ -6,6 +6,7 @@ from torchvision import transforms
 from torch.autograd import Variable
 from inputRGBD import RGBDDataset
 from invert import tran_matrix_2_vec
+from rot_vec_loss import RotVecLoss
 from torch.utils.data.dataloader import DataLoader
 from PIL import Image
 import numpy
@@ -35,6 +36,7 @@ dataLoader = DataLoader(new_dataset, batch_size=1, shuffle=True, num_workers=0, 
 # step 3: select optimizer
 optimizer = torch.optim.SGD(resnet18.parameters(), lr=0.01, momentum=0.9)
 loss_func = torch.nn.L1Loss()
+rot_loss_func = RotVecLoss()
 # step 4: start training
 running_loss = torch.zeros(1).cuda()
 running_rot_loss = torch.zeros(1).cuda()
@@ -50,6 +52,7 @@ for epoch in range(10):
         img = img_color.numpy().reshape(640, 480, 3)
         img2 = img_depth.numpy().reshape(640, 480)
         rot_vec, trans_vec = tran_matrix_2_vec(frame_pose.numpy().reshape(4, 4))
+        rot_matrix = frame_pose.view(4, 4)[0:3, 0:3]
         pose_data = torch.from_numpy(numpy.append(rot_vec, trans_vec)).cuda()
         # print(pose_data)
 
@@ -66,12 +69,12 @@ for epoch in range(10):
         # print(frame_pose_input)
 
         loss = loss_func(prediction.double().view(6), pose_data).cuda()
-        rot_loss = loss_func(prediction.double().view(6)[0:3], pose_data[0:3]).cuda()
         trans_loss = loss_func(prediction.double().view(6)[3:6], pose_data[3:6]).cuda()
         # print(loss)
         loss.backward()
         optimizer.step()
 
+        rot_loss = rot_loss_func(prediction.double().view(6)[0:3].cpu().detach(), rot_matrix)
         # print statistics
         # if torch.cuda.is_available():
         #     loss = loss.to("cpu")
@@ -81,6 +84,7 @@ for epoch in range(10):
         running_trans_loss += trans_loss.item()
         if i % 200 == 199:
             print('[%d, %5d] loss: %.3f' % (epoch+1, i+1, running_loss/200))
+            print('[%d, %5d] rot loss: %.3f' % (epoch + 1, i + 1, running_rot_loss / 200))
             loss_list.append(running_loss/200)
             rot_loss_list.append(running_rot_loss/200)
             trans_loss_list.append(running_trans_loss/200)

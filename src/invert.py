@@ -15,7 +15,11 @@ def vec2T(rotvec, tranvec):
     T[3, 3] = 1.0
     return T
 
+
 # a = np.array([0.3, 0.5, 0.7])
+# print(cv2.Rodrigues(a)[0])
+# print(cv2.Rodrigues(a.T)[0])
+# print(cv2.Rodrigues(a)[0] - cv2.Rodrigues(a.T)[0])
 #
 # print(vec2T(a, a))
 # print(cv2.Rodrigues(a)[0])
