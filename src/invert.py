@@ -4,14 +4,14 @@ import numpy as np
 
 def tran_matrix_2_vec(transfomation_matrix):
     rot_vec, jacb = cv2.Rodrigues(transfomation_matrix[0:3, 0:3])
-    trans_vec = (np.linalg.inv(transfomation_matrix[0:3, 0:3]) @ (-transfomation_matrix[0:3, 3]).T).T
+    trans_vec = transfomation_matrix[0:3, 3].T
     return rot_vec.T, trans_vec
 
 
 def vec2T(rotvec, tranvec):
     T = np.zeros([4, 4])
     T[0:3, 0:3] = cv2.Rodrigues(rotvec)[0]
-    T[0:3, 3] = - (T[0:3, 0:3] @ tranvec.T).T
+    T[0:3, 3] = tranvec.T
     T[3, 3] = 1.0
     return T
 
