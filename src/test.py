@@ -9,6 +9,7 @@ from PIL import Image
 import numpy
 from torchvision import models
 from torch.hub import load_state_dict_from_url
+import numpy as np
 
 
 class ModifiedResNet18(models.ResNet):
@@ -54,12 +55,13 @@ torch.set_grad_enabled(False)
 if torch.cuda.is_available():
     model.cuda()
 # step 3: prepare the dataset, dataLoader and loss function
-test_dataset = RGBDDataset('office', './', 'seq-02', 1000)
+test_dataset = RGBDDataset('office', './', 'seq-01', 1000)
 dataLoader = DataLoader(test_dataset, batch_size=1, shuffle=True, num_workers=0, drop_last=True)
 loss_func = torch.nn.L1Loss()
 running_loss = torch.zeros(1)
 running_rot_loss = torch.zeros(1)
 running_trans_loss = torch.zeros(1)
+prediction_list = []
 for i, (index, img_color, img_depth, frame_pose) in enumerate(dataLoader, 0):
     # print(index)
     img = img_color.numpy().reshape(640, 480, 3)
@@ -93,6 +95,7 @@ for i, (index, img_color, img_depth, frame_pose) in enumerate(dataLoader, 0):
     running_loss += loss
     running_rot_loss += rot_loss
     running_trans_loss += trans_loss
+    prediction_list.append(prediction.double().cpu().view(6).numpy())
     if i % 1000 == 999:
         print('[%4d] loss: %.3f rot_loss: %.3f trans_loss: %.3f\n[%4dth] pose_data:' %
               (i + 1, running_loss / 1000, running_rot_loss / 1000, running_trans_loss / 1000, i + 1))
@@ -103,6 +106,8 @@ for i, (index, img_color, img_depth, frame_pose) in enumerate(dataLoader, 0):
         running_loss = 0
         running_rot_loss = 0
         running_trans_loss = 0
+
+np.savetxt("prediction.txt", prediction_list, fmt='%1.7e')
 # [   50] loss: 0.464
 # [  100] loss: 0.444
 # [  150] loss: 0.426
