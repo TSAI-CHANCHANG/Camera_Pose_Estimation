@@ -7,6 +7,8 @@ from torchvision import models
 import torchvision.transforms as transforms
 from torch.hub import load_state_dict_from_url
 from PIL import Image
+import matplotlib.pyplot as plt
+from combine_loss import CombineLoss
 from rot_vec_loss import RotVecLoss
 from invert import tran_matrix_2_vec
 
@@ -54,16 +56,20 @@ scene_name = 'office'
 seq = 'seq-01'
 # step1: prepare network
 MyResNet18 = ModifiedResNet18().cuda()
-from torchsummary import summary
-summary(MyResNet18, (3, 960, 640))
+# from torchsummary import summary
+# summary(MyResNet18, (3, 960, 640))
 # print(MyResNet18)
 # step2: select optimizer and loss function
 optimizer = torch.optim.SGD(MyResNet18.parameters(), lr=0.01, momentum=0.9)
-loss_func = torch.nn.L1Loss()
+trans_loss_func = torch.nn.L1Loss()
 rot_loss_func = RotVecLoss()
+combine_loss_func = torch.nn.L1Loss()
 running_loss = torch.zeros(1).cuda()
 running_rot_loss = torch.zeros(1).cuda()
 running_trans_loss = torch.zeros(1).cuda()
+loss_list = []
+rot_loss_list = []
+trans_loss_list = []
 # step3: start training
 for epoch in range(10):
     for index in range(1000):
@@ -88,24 +94,55 @@ for epoch in range(10):
         input_batch = input_tensor.unsqueeze(0).cuda()
 
         # second, prepare ground truth data
-        trans_mat = np.loadtxt(ground_truth_path).reshape(4, 4)
-        rot_vec, trans_vec = tran_matrix_2_vec(trans_mat)
+        ground_truth_trans_mat = np.loadtxt(ground_truth_path).reshape(4, 4)
+        rot_vec, trans_vec = tran_matrix_2_vec(ground_truth_trans_mat)
         pose_data = torch.from_numpy(np.append(rot_vec, trans_vec)).cuda()
         # print(trans_mat)
 
         # third, feed the data to the network
         optimizer.zero_grad()
         prediction = MyResNet18(input_batch)
-        loss = loss_func(prediction.double().view(6), pose_data).cuda()
-        trans_loss = loss_func(prediction.double().view(6)[3:6], pose_data[3:6]).cuda()
-        loss.backward()
+        combine_loss = combine_loss_func(prediction.double().view(6), pose_data).cuda()
+        trans_loss = trans_loss_func(prediction.double().view(6)[3:6], pose_data[3:6]).cuda()
+        combine_loss.backward()
         optimizer.step()
 
         # print loss
-        running_loss += loss.item()
+        rot_loss = rot_loss_func(prediction.double().view(6)[0:3].cpu().detach(), ground_truth_trans_mat[0:3, 0:3])
+        running_loss += combine_loss.item()
+        running_rot_loss += rot_loss.item()
         running_trans_loss += trans_loss.item()
-        if index % 200 == 199:
+        if (index % 200 == 199) | (index + k == 999):
             print('[%d, %5d] loss: %.3f' % (epoch+1, index+1, running_loss/200))
-            print('[%d, %5d] trans loss: %.3f' % (epoch + 1, index+1, running_trans_loss/200))
+            print('[%d, %5d] rot loss: %.3f' % (epoch+1, index+1, running_rot_loss/200))
+            print('[%d, %5d] trans loss: %.3f' % (epoch+1, index+1, running_trans_loss/200))
+            loss_list.append(running_loss / 200)
+            rot_loss_list.append(running_rot_loss / 200)
+            trans_loss_list.append(running_trans_loss / 200)
             running_loss = 0
+            running_rot_loss = 0
             running_trans_loss = 0
+torch.save(MyResNet18, scene_name + '_' + seq + '_pair_' + str(k) + '_Pose_estimate_net.pkl')
+x = []
+for i in range(50):
+    x.append(0.2 * (i + 1))
+plt.figure(figsize=(8, 4))
+plt.plot(x, loss_list, label="$loss$", color="red", linewidth=2)
+plt.xlabel("epoch")
+plt.ylabel("loss")
+plt.savefig(scene_name + '_' + seq + '_pair_' + str(k) + "_loss.png")
+plt.show()
+
+plt.figure(figsize=(8, 4))
+plt.plot(x, rot_loss_list, label="$loss$", color="red", linewidth=2)
+plt.xlabel("epoch")
+plt.ylabel("rot_loss")
+plt.savefig(scene_name + '_' + seq + '_pair_' + str(k) + "_rot_loss.png")
+plt.show()
+
+plt.figure(figsize=(8, 4))
+plt.plot(x, trans_loss_list, label="$loss$", color="red", linewidth=2)
+plt.xlabel("epoch")
+plt.ylabel("trans_loss")
+plt.savefig(scene_name + '_' + seq + '_pair_' + str(k) + "_trans_loss.png")
+plt.show()

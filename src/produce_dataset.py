@@ -3,10 +3,10 @@ from math import log
 import numpy as np
 
 index = 0
-k = 20
+k = 1
 path = './'
-scene_name = 'office'
-seq = 'seq-02'
+scene_name = 'stairs'
+seq = 'seq-01'
 for index in range(1000):
     if index + k >= 1000:
         break
@@ -36,7 +36,7 @@ for index in range(1000):
     relative_matrix[0:3, 0:3] = relative_rot
     relative_matrix[0:3, 3] = relative_trans
     relative_matrix[3, 3] = 1
-    savePath = './'+scene_name+'./'+seq+'./'+'pair_'+str(k)+'/'+str(index)+' '+str(index+k)+'.txt'
+    savePath = './'+scene_name+'/'+seq+'/'+'pair_'+str(k)+'/'+str(index)+' '+str(index+k)+'.txt'
     np.savetxt(savePath, relative_matrix, fmt='%1.7e')
 # loadMatrix = np.loadtxt(path)
 # print(loadMatrix)

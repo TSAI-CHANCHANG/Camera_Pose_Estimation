@@ -1,21 +1,50 @@
 from __future__ import print_function
 import torch
 import torch.nn as nn
-import torchvision.models as models
 from torchvision import transforms
-from torch.autograd import Variable
 from inputRGBD import RGBDDataset
 from invert import tran_matrix_2_vec
 from torch.utils.data.dataloader import DataLoader
 from PIL import Image
 import numpy
+from torchvision import models
+from torch.hub import load_state_dict_from_url
+
+
+class ModifiedResNet18(models.ResNet):
+    def __init__(self, num_classes=6, pretrained=False, **kwargs):
+        super().__init__(block=models.resnet.BasicBlock,
+                         layers=[2, 2, 2, 2],
+                         num_classes=num_classes, **kwargs)
+        if pretrained:
+            state_dict = load_state_dict_from_url(models.resnet.model_urls["resnet18"], progress=True)
+            self.load_state_dict(state_dict)
+        # self.avgpool = nn.AvgPool2d((7, 7))
+        self.last_conv = nn.Conv2d(in_channels=self.fc.in_features,
+                                   out_channels=num_classes,
+                                   kernel_size=1)
+        self.last_conv.weight.data.copy_(self.fc.weight.data.view(*self.fc.weight.data.shape, 1, 1))
+        self.last_conv.bias.data.copy_(self.fc.bias.data)
+
+    def _forward_impl(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+        x = self.maxpool(x)
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+        x = self.layer4(x)
+        x = self.avgpool(x)
+        x = self.last_conv(x)
+        return x
+
 
 preprocess = transforms.Compose([
-            transforms.Resize([256, 256]),
-            transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225])
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225])
         ])
 # step 1: load the trained model
 model = torch.load('model.pkl')

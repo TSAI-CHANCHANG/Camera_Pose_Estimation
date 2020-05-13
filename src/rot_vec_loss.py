@@ -11,7 +11,7 @@ class RotVecLoss(nn.Module):
 
     def forward(self, prediction, ground_truth_matrix):
         pred_vec = prediction.numpy()
-        g_t_matrix = ground_truth_matrix.numpy()
+        g_t_matrix = ground_truth_matrix#.numpy()
         pred_matrix = cv2.Rodrigues(pred_vec)[0]
         R = g_t_matrix.T @ pred_matrix
         # g_t_matrix denote as m1, pred_matrix as m2

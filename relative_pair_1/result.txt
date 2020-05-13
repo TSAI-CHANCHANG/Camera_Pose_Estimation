@@ -1,0 +1,164 @@
+[1,   200] loss: 0.207
+[1,   200] rot loss: 0.420
+[1,   200] trans loss: 0.206
+[1,   400] loss: 0.100
+[1,   400] rot loss: 0.170
+[1,   400] trans loss: 0.116
+[1,   600] loss: 0.075
+[1,   600] rot loss: 0.151
+[1,   600] trans loss: 0.073
+[1,   800] loss: 0.050
+[1,   800] rot loss: 0.099
+[1,   800] trans loss: 0.051
+[1,   999] loss: 0.037
+[1,   999] rot loss: 0.068
+[1,   999] trans loss: 0.040
+[2,   200] loss: 0.040
+[2,   200] rot loss: 0.073
+[2,   200] trans loss: 0.045
+[2,   400] loss: 0.040
+[2,   400] rot loss: 0.084
+[2,   400] trans loss: 0.040
+[2,   600] loss: 0.036
+[2,   600] rot loss: 0.073
+[2,   600] trans loss: 0.035
+[2,   800] loss: 0.032
+[2,   800] rot loss: 0.073
+[2,   800] trans loss: 0.027
+[2,   999] loss: 0.024
+[2,   999] rot loss: 0.049
+[2,   999] trans loss: 0.023
+[3,   200] loss: 0.025
+[3,   200] rot loss: 0.051
+[3,   200] trans loss: 0.024
+[3,   400] loss: 0.022
+[3,   400] rot loss: 0.044
+[3,   400] trans loss: 0.022
+[3,   600] loss: 0.025
+[3,   600] rot loss: 0.049
+[3,   600] trans loss: 0.026
+[3,   800] loss: 0.024
+[3,   800] rot loss: 0.047
+[3,   800] trans loss: 0.025
+[3,   999] loss: 0.023
+[3,   999] rot loss: 0.047
+[3,   999] trans loss: 0.022
+[4,   200] loss: 0.015
+[4,   200] rot loss: 0.031
+[4,   200] trans loss: 0.014
+[4,   400] loss: 0.017
+[4,   400] rot loss: 0.036
+[4,   400] trans loss: 0.015
+[4,   600] loss: 0.016
+[4,   600] rot loss: 0.031
+[4,   600] trans loss: 0.015
+[4,   800] loss: 0.017
+[4,   800] rot loss: 0.038
+[4,   800] trans loss: 0.016
+[4,   999] loss: 0.014
+[4,   999] rot loss: 0.031
+[4,   999] trans loss: 0.014
+[5,   200] loss: 0.012
+[5,   200] rot loss: 0.024
+[5,   200] trans loss: 0.011
+[5,   400] loss: 0.010
+[5,   400] rot loss: 0.020
+[5,   400] trans loss: 0.011
+[5,   600] loss: 0.011
+[5,   600] rot loss: 0.019
+[5,   600] trans loss: 0.013
+[5,   800] loss: 0.013
+[5,   800] rot loss: 0.029
+[5,   800] trans loss: 0.012
+[5,   999] loss: 0.015
+[5,   999] rot loss: 0.032
+[5,   999] trans loss: 0.015
+[6,   200] loss: 0.010
+[6,   200] rot loss: 0.023
+[6,   200] trans loss: 0.009
+[6,   400] loss: 0.012
+[6,   400] rot loss: 0.021
+[6,   400] trans loss: 0.014
+[6,   600] loss: 0.011
+[6,   600] rot loss: 0.025
+[6,   600] trans loss: 0.011
+[6,   800] loss: 0.012
+[6,   800] rot loss: 0.028
+[6,   800] trans loss: 0.011
+[6,   999] loss: 0.011
+[6,   999] rot loss: 0.024
+[6,   999] trans loss: 0.009
+[7,   200] loss: 0.009
+[7,   200] rot loss: 0.019
+[7,   200] trans loss: 0.008
+[7,   400] loss: 0.011
+[7,   400] rot loss: 0.023
+[7,   400] trans loss: 0.010
+[7,   600] loss: 0.009
+[7,   600] rot loss: 0.021
+[7,   600] trans loss: 0.008
+[7,   800] loss: 0.010
+[7,   800] rot loss: 0.023
+[7,   800] trans loss: 0.008
+[7,   999] loss: 0.009
+[7,   999] rot loss: 0.020
+[7,   999] trans loss: 0.008
+[8,   200] loss: 0.008
+[8,   200] rot loss: 0.018
+[8,   200] trans loss: 0.007
+[8,   400] loss: 0.008
+[8,   400] rot loss: 0.016
+[8,   400] trans loss: 0.009
+[8,   600] loss: 0.007
+[8,   600] rot loss: 0.015
+[8,   600] trans loss: 0.008
+[8,   800] loss: 0.009
+[8,   800] rot loss: 0.020
+[8,   800] trans loss: 0.008
+[8,   999] loss: 0.008
+[8,   999] rot loss: 0.018
+[8,   999] trans loss: 0.007
+[9,   200] loss: 0.008
+[9,   200] rot loss: 0.017
+[9,   200] trans loss: 0.007
+[9,   400] loss: 0.009
+[9,   400] rot loss: 0.021
+[9,   400] trans loss: 0.008
+[9,   600] loss: 0.007
+[9,   600] rot loss: 0.014
+[9,   600] trans loss: 0.007
+[9,   800] loss: 0.008
+[9,   800] rot loss: 0.019
+[9,   800] trans loss: 0.007
+[9,   999] loss: 0.008
+[9,   999] rot loss: 0.016
+[9,   999] trans loss: 0.007
+[10,   200] loss: 0.007
+[10,   200] rot loss: 0.015
+[10,   200] trans loss: 0.006
+[10,   400] loss: 0.007
+[10,   400] rot loss: 0.016
+[10,   400] trans loss: 0.006
+[10,   600] loss: 0.007
+[10,   600] rot loss: 0.015
+[10,   600] trans loss: 0.007
+[10,   800] loss: 0.007
+[10,   800] rot loss: 0.017
+[10,   800] trans loss: 0.006
+[10,   999] loss: 0.007
+[10,   999] rot loss: 0.016
+[10,   999] trans loss: 0.007
+k = 1
+[ 999] loss: 0.012 rot_loss: 0.035 trans_loss: 0.008
+k = 2
+[ 998] loss: 0.015 rot_loss: 0.039 trans_loss: 0.012
+k = 3
+[ 997] loss: 0.019 rot_loss: 0.045 trans_loss: 0.016
+k = 5
+[ 995] loss: 0.028 rot_loss: 0.062 trans_loss: 0.025
+k = 10
+[ 990] loss: 0.051 rot_loss: 0.110 trans_loss: 0.047
+k = 20
+[ 980] loss: 0.096 rot_loss: 0.205 trans_loss: 0.090
+k = 50
+[ 950] loss: 0.204 rot_loss: 0.429 trans_loss: 0.192
